@@ -9,23 +9,14 @@ function App(){
 return(
 
 <BrowserRouter>
-
 <Routes>
-
 <Route path="/" element={<Chats/>} />
-
 <Route path="/chats" element={<Chats/>} />
-
 <Route path="/statuses" element={<Statuses/>} />
-
 <Route path="/calls" element={<Calls/>} />
-
 </Routes>
-
 </BrowserRouter>
-
 )
-
 }
 
 export default App;
