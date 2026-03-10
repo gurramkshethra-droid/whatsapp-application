@@ -1,31 +1,26 @@
-import "./App.css";
-import {BrowserRouter,Routes,Route} from "react-router-dom"
-import Chats from "./components/Chats";
-import Statuses from "./components/Statuses";
-import Calls from "./components/Calls";
+import { AuthProvider, useAuth } from './AuthContext';
+import { Login, Home, Profile } from './Components';
 
-function App(){
+const AppContent = () => {
+  const { user } = useAuth();
 
-return(
+  if (!user) return <Login />;
 
-<BrowserRouter>
+  return (
+    <main style={{ padding: '2rem' }}>
+      <Home />
+      <hr />
+      <Profile />
+    </main>
+  );
+};
 
-<Routes>
-
-<Route path="/" element={<Chats/>} />
-
-<Route path="/chats" element={<Chats/>} />
-
-<Route path="/statuses" element={<Statuses/>} />
-
-<Route path="/calls" element={<Calls/>} />
-
-</Routes>
-
-</BrowserRouter>
-
-)
-
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
 }
 
 export default App;
