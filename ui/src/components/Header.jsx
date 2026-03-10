@@ -5,7 +5,7 @@ function Header({ name }) {
         <div className="header">
             <h1>{name}</h1>
             <Menu items={items} />
-        </div>
+        </div>/*Menu list*/
     )
 }
 export default Header;

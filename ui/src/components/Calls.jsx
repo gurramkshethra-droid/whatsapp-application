@@ -4,7 +4,7 @@ function Calls() {
         <div className="calls">
             <Header name="WhatsApp" />
             <h2>Calls</h2>
-            {/* Call list will go here */}
+            {/* Call list will go here.. */}
         </div>
     )
 }
