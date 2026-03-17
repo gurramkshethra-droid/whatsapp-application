@@ -1,38 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Register</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  .input-box {
+    margin-bottom: 15px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+  }
+
+  input:focus {
+    border-color: #4facfe;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #4facfe;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background: #00c6ff;
+  }
+
+  .link {
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  .link a {
+    text-decoration: none;
+    color: #4facfe;
+  }
+
+  .error {
+    color: red;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+</style>
 </head>
 
 <body>
 
-<h2>Register</h2>
-<!---takes input for registration-->
-<input id="username" placeholder="Username"><br><br>
-<input id="password" type="password" placeholder="Password"><br><br>
+<div class="card">
+  <h2>Create Account</h2>
 
-<button onclick="register()">Register</button>
+  <div class="error" id="error"></div>
 
-<p>Already have account? <a href="/">Login</a></p>
+  <div class="input-box">
+    <input id="username" placeholder="Username">
+  </div>
+
+  <div class="input-box">
+    <input id="password" type="password" placeholder="Password">
+  </div>
+
+  <button id="btn" onclick="register()">Register</button>
+
+  <div class="link">
+    Already have an account? <a href="/">Login</a>
+  </div>
+</div>
 
 <script>
+async function register() {
 
-async function register(){
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const error = document.getElementById("error");
+  const btn = document.getElementById("btn");
 
-const username=document.getElementById("username").value
-const password=document.getElementById("password").value
+  error.textContent = "";
 
-await fetch("/register",{
-method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({username,password})
-})
+  // Validation
+  if (!username || !password) {
+    error.textContent = "Please fill all fields";
+    return;
+  }
 
-alert("Registered Successfully")
-window.location="/"
+  if (password.length < 6) {
+    error.textContent = "Password must be at least 6 characters";
+    return;
+  }
 
+  try {
+    btn.textContent = "Registering...";
+    btn.disabled = true;
+
+    const res = await fetch("/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    if (!res.ok) {
+      throw new Error("Registration failed");
+    }
+
+    alert("Registered Successfully!");
+    window.location = "/";
+
+  } catch (err) {
+    error.textContent = err.message;
+  } finally {
+    btn.textContent = "Register";
+    btn.disabled = false;
+  }
 }
-
 </script>
 
 </body>
