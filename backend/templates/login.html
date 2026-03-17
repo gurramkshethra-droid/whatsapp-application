@@ -1,47 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login</title>
-<!---login page--->
+
 <style>
-body{
-font-family:Arial;
-background:#f3f4f6;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #4f46e5, #6d28d9);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+/* Card */
 .box{
-background:white;
-padding:30px;
-border-radius:10px;
-width:300px;
+  background:white;
+  padding:35px;
+  border-radius:15px;
+  width:320px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  text-align:center;
+}
+
+h2{
+  margin-bottom:20px;
+  color:#333;
+}
+
+/* Inputs */
+.input-group{
+  position:relative;
 }
 
 input{
-width:100%;
-padding:10px;
-margin:10px 0;
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border:1px solid #ccc;
+  border-radius:8px;
+  outline:none;
+  transition:0.3s;
 }
 
+input:focus{
+  border-color:#4f46e5;
+  box-shadow:0 0 5px rgba(79,70,229,0.4);
+}
+
+/* Button */
 button{
-width:100%;
-padding:10px;
-background:#4f46e5;
-color:white;
-border:none;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  background:#4f46e5;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+  transition:0.3s;
 }
-</style>
 
+button:hover{
+  background:#4338ca;
+  transform:scale(1.03);
+}
+
+/* Link */
+p{
+  margin-top:15px;
+  font-size:14px;
+}
+
+a{
+  color:#4f46e5;
+  text-decoration:none;
+  font-weight:500;
+}
+
+a:hover{
+  text-decoration:underline;
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="box">
 
-<h2>Login</h2>
+<h2>Welcome Back 👋</h2>
 
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
@@ -56,22 +113,32 @@ border:none;
 
 async function login(){
 
-const username=document.getElementById("username").value
-const password=document.getElementById("password").value
+const username = document.getElementById("username").value;
+const password = document.getElementById("password").value;
 
-const res=await fetch("/login",{
-method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({username,password})
-})
+if(!username || !password){
+  alert("Please fill all fields");
+  return;
+}
 
-const data=await res.json()
+try{
+  const res = await fetch("/login",{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username,password})
+  });
 
-if(data.user){
-localStorage.setItem("userId",data.user.id)
-window.location="/dashboard"
-}else{
-alert("Invalid Login")
+  const data = await res.json();
+
+  if(data.user){
+    localStorage.setItem("userId", data.user.id);
+    window.location="/dashboard";
+  }else{
+    alert("Invalid Login");
+  }
+
+}catch(err){
+  alert("Server error. Try again!");
 }
 
 }
